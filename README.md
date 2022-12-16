@@ -74,15 +74,15 @@ Final Project by Team1 FJ
 - 모바일 메인페이지
 
 <img src="Witing/witing/src/main/resources/static/images/readme/IMG_3593.GIF" width="350"/>
-	- 지역별로 호텔 정보를 볼 수 있도록 구분되어 있습니다.
-	- 지역, 날짜, 카테고리를 선택하여 호텔을 검색할 수 있고, 날짜를 선택하여 동행을 검색할 수 있습니다.
+	- 지역별로 호텔 정보를 볼 수 있도록 구분되어 있습니다.<br>
+	- 지역, 날짜, 카테고리를 선택하여 호텔을 검색할 수 있고, 날짜를 선택하여 동행을 검색할 수 있습니다.<br>
 <br><br>
 
 - 모바일 챗봇 페이지
 
 <img src="Witing/witing/src/main/resources/static/images/readme/chatbot.gif" width="350"/>
-	- NCP Chatbot 서비스를 이용한 실시간 챗봇 문의 기능입니다.
-	- 질문을 NCP 서버에 추가하여 AI를 통해 질문에 대한 답변을 받을 수 있습니다.
+	- NCP Chatbot 서비스를 이용한 실시간 챗봇 문의 기능입니다.<br>
+	- 질문을 NCP 서버에 추가하여 AI를 통해 질문에 대한 답변을 받을 수 있습니다.<br>
 <br><br>
 
 - 모바일 호텔페이지
@@ -90,18 +90,18 @@ Final Project by Team1 FJ
 <img src="Witing/witing/src/main/resources/static/images/readme/IMG_3598.GIF" width="350"/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="Witing/witing/src/main/resources/static/images/readme/likenhotel.gif" width="350"/>
-	- 호텔 리스트를 볼 수 있습니다.
-	- 하트 아이콘을 클릭하여 좋아요에 추가 가능하며 하트 아이콘을 다시 누르면 삭제가능합니다.
-	- 호텔을 선택하여 들어갈 경우 호텔 상세페이지가 나와 객실을 확인할 수 있습니다.
+	- 호텔 리스트를 볼 수 있습니다.<br>
+	- 하트 아이콘을 클릭하여 좋아요에 추가 가능하며 하트 아이콘을 다시 누르면 삭제가능합니다.<br>
+	- 호텔을 선택하여 들어갈 경우 호텔 상세페이지가 나와 객실을 확인할 수 있습니다.<br>
 <br><br>
 
 - 모바일 웹소켓 예약화면
 
 <img src="Witing/witing/src/main/resources/static/images/readme/reserv.GIF" width="350"/>
-	- WebSocket을 사용하여 실시간 예약이 반영되도록 하였습니다.
-	- 예약하려는 호텔을 서로 다른 사용자가 보고 있을때 한명의 사용자가 예약을 완료할 경우 캘린더에 표시됩니다.
-	- 예약된 날짜는 선택되지 않습니다.
-	- 날짜와 인원수를 선택하면 가격이 자동으로 반영됩니다.
+	- WebSocket을 사용하여 실시간 예약이 반영되도록 하였습니다.<br>
+	- 예약하려는 호텔을 서로 다른 사용자가 보고 있을때 한명의 사용자가 예약을 완료할 경우 캘린더에 표시됩니다.<br>
+	- 예약된 날짜는 선택되지 않습니다.<br>
+	- 날짜와 인원수를 선택하면 가격이 자동으로 반영됩니다.<br>
 <br><br>
 
 
@@ -111,19 +111,19 @@ Final Project by Team1 FJ
 <img src="Witing/witing/src/main/resources/static/images/readme/wrtieaplus.gif" width="350"/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="Witing/witing/src/main/resources/static/images/readme/accomgif.gif" width="350"/>
-	- 원하는 동행글을 클릭하면 게시글을 쓴 작성자의 본인이증 여부와 여행 MBTI를 확인할 수 있습니다.
-	- 동행 일정과 카카오맵에 동행하려는 위치가 피봇으로 표시되어 있습니다.
-	- 동행 게시글 작성시 + 아이콘을 눌러 동적으로 일정을 추가할 수 있습니다.
-	- 동적으로 입력하기 위해 javascript의 'document.getElementById('addplan').appendChild(div);'를 사용하였습니다.
+	- 원하는 동행글을 클릭하면 게시글을 쓴 작성자의 본인이증 여부와 여행 MBTI를 확인할 수 있습니다.<br>
+	- 동행 일정과 카카오맵에 동행하려는 위치가 피봇으로 표시되어 있습니다.<br>
+	- 동행 게시글 작성시 + 아이콘을 눌러 동적으로 일정을 추가할 수 있습니다.<br>
+	- 동적으로 입력하기 위해 javascript의 'document.getElementById('addplan').appendChild(div);'를 사용하였습니다.<br>
 <br><br>
 
 
 - MBTI 검사 & 결과페이지
 
 <img src="Witing/witing/src/main/resources/static/images/readme/mbti.gif" width="350"/>
-	- 동행을 할때에 서로의 여행 스타일을 파악하기 위해 추가한 여행 MBTI 기능입니다.
-	- 12개의 질문을 통해 여행 MBTI를 분석합니다.
-	- MBTI는 여러번 다시 진행할 수 있으며 동행 게시글에 작성자의 MBTI가 표시됩니다.
+	- 동행을 할때에 서로의 여행 스타일을 파악하기 위해 추가한 여행 MBTI 기능입니다.<br>
+	- 12개의 질문을 통해 여행 MBTI를 분석합니다.<br>
+	- MBTI는 여러번 다시 진행할 수 있으며 동행 게시글에 작성자의 MBTI가 표시됩니다.<br>
 <br>
 
 
