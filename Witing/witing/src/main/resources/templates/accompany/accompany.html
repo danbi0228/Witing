@@ -1,0 +1,137 @@
+<link rel="stylesheet" th:href="@{/css/accompany.css}">
+
+<script>
+function movePage(uri, queryString) {
+    console.log(uri);
+    console.log(queryString);
+
+    location.href = uri + queryString+"&sdate="+$('#search_sdate').text()+"&edate="+$('#search_edate').text();
+   
+}
+</script>
+
+ <!-- END nav -->
+ 
+ <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/bg_2.jpg');">
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+    
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+      
+       <p class="breadcrumbs"><span class="mr-2"><a th:href="@{/}">Home <i class="fa fa-chevron-right"></i></a></span> <span><a th:href="@{/accompany}">Accompany <i class="fa fa-chevron-right"></i></a></span></p>
+       <h1 class="mb-0 bread">Accompany</h1>
+       
+     </div>
+   </div>
+ </div>
+</section>
+
+<section id="search_s" class="ftco-section ftco-no-pb">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-12">
+				<div class="search-wrap-1 ftco-animate">
+					<form action="/searchaccom" class="search-property-1" id="search_form">
+						<div class="row no-gutters">
+							<div class="col-md d-flex">
+								<div class="form-group p-4 border-0">
+									<label for="#">start date</label>
+									<div class="form-field">
+										<div class="icon" style="width:10%;"><span class="fa fa-calendar"></span></div>
+										<input type="text" class="form-control checkin_date" id="sdate" placeholder="Start Date" name="sdate">
+									</div>
+								</div>
+							</div>
+							<div class="col-md d-flex">
+								<div class="form-group p-4">
+									<label for="#">end date</label>
+									<div class="form-field">
+										<div class="icon" style="width:10%;"><span class="fa fa-calendar"></span></div>
+										<input type="text" class="form-control checkout_date" id="edate" placeholder="End Date" name="edate">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2 d-flex">
+								<div class="form-group d-flex w-100 border-0">
+									<div class="form-field w-100 align-items-center d-flex">
+										<input type="submit" value="Search" class="align-self-stretch form-control btn btn-primary">
+										<div id="custid" th:if="${session.logincust != null}" style="display:none;" th:text="${session.logincust.custid}"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+	</section>
+
+<section class="ftco-section">
+  <div class="container">
+	<!-- <h2 id="a_title">Accompany List</h2> -->
+	
+	<div id="search_sdate" th:text="${sdate}" style="display:none;"></div>
+	<div id="search_edate" th:text="${edate}" style="display:none;"></div>
+	<table class="table table-hover" id="list_table">
+		<colgroup>
+			<col style="width:12%">
+			<col style="width:20%">
+			<col style="width:40%">
+			<col style="width:28%">
+		</colgroup>
+		
+		<thead>
+		<tr id="tablehead">
+			<th>No</th>
+			<th>User ID</th>
+			<th>Title</th>
+			<th>Travel Time</th>
+		</tr>
+		</thead>
+		<tbody th:each=li:${list}>
+		<tr>
+			<td th:text="${li.accomid}"></td>
+			<td th:text="${li.custid}"></td>
+			<td>
+				<a th:if="${session.logincust != null}" th:href="@{/plan(accomid=${li.accomid})}" th:text="${li.title}" style="color: black;"></a>
+				<a th:if="${session.logincust == null}" th:href="@{/login}" th:text="${li.title}" style="color: black;"></a>
+			</td>
+			<td th:text="${#dates.format(li.traveltime, 'yyyy-MM-dd')}"></td>
+		</tr>
+		</tbody>
+	<a th:href="@{/writeaccom}" th:if="${session.logincust != null}" class="btn btn-primary" id="writebtn">글 작성하기</a><br><br>
+	</table>
+	
+<div class="row mt-5">
+  <div class="col text-center">
+    
+    <div class="block-27">
+      <ul>
+		<th:block th:if="${pageMaker.prev}">
+        	<li class="pageMaker_btn prev">
+        		<a href="javascript:void(0)" th:onclick="movePage([[${#request.requestURI}]], [[${pageMaker.cri.makeQueryString(pageMaker.pageStart - 1)}]])">&lt;</a>
+        	</li>
+        </th:block>
+        
+        <th:block th:with="pageMaker = ${pageMaker}">
+		    <th:block th:each="num : *{#numbers.sequence(pageMaker.pageStart, pageMaker.pageEnd)}">
+		        <li class="pageMaker_btn" th:classappend="${pageMaker.cri.pageNum == num} ? 'active' : ''">
+		            <a href="javascript:void(0)"  th:text="${num}" th:onclick="movePage([[${#request.requestURI}]],[[${pageMaker.cri.makeQueryString(num)}]])">1</a>
+		        </li>
+		    </th:block>
+		</th:block>
+		
+		<th:block th:if="${pageMaker.next}">
+		    <li class="pageMaker_btn next">
+		        <a href="javascript:void(0)" th:onclick="movePage([[${#request.requestURI}]], [[${pageMaker.cri.makeQueryString(pageMaker.pageEnd + 1)}]])">&gt;</a>
+		    </li>
+		</th:block>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+</div>
+</section>	

@@ -1,0 +1,101 @@
+<head>
+<link rel="stylesheet" href="/css/calender.css"> 
+<!-- jQuery 결제 API 연동-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<!-- iamport.payment.js -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+	
+ </head>
+ <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/ReservationBackground.jpeg');">
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+       <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="fa fa-chevron-right"></i></a></span> <span>Hotel</span>
+          <i class="fa fa-chevron-right"></i></a></span> <span>Room Details </span><i class="fa fa-chevron-right"></i></a></span> <span>Reservation</span></p>
+       <h1 class="mb-0 bread">Reservation</h1>
+     </div>
+   </div>
+ </div>
+</section>
+
+<section class="ftco-section contact-section ftco-no-pt">
+
+  <div class="container">
+    <div class="row block-9 justify-content-center">
+      <div class="row block-9 justify-content-center">
+      	<div class="calender-main">
+		    <div class="calender-wrap">
+		      <div class="calender">
+		        <table id="calendar" align="center">
+		          <thead>
+		            <tr class="btn-wrap clearfix">
+		              <td>
+		                <label id="prev">
+							&#60;
+		                </label>
+		              </td>
+		              <td align="center" id="current-year-month" colspan="5"></td>
+		              <td>
+		                <label id="next">
+		                    &#62;
+		                </label>
+		              </td>
+		            </tr>
+		            <tr>
+		                <td class = "sun" align="center">Sun</td>
+		                <td align="center">Mon</td>
+		                <td align="center">Tue</td>
+		                <td align="center">Wed</td>
+		                <td align="center">Thu</td>
+		                <td align="center">Fri</td>
+		                <td class= "sat" align="center">Sat</td>
+		              </tr>
+		          </thead>
+		        <tbody id="calendar-body" class="calendar-body"></tbody>
+		      </table>
+		    </div>
+		  </div>
+		</div>
+		<div>
+		<div class="justify-content-center">
+        <form id="reservform" class="p-5 contact-form justify-content-center">
+          <div class="form-group">
+            <input id="custname" type="text" class="form-control" th:value="${custname}">
+            <input id="custid" th:value="${custid}" style="display:none" name="custid">
+          </div>
+          <div class="form-group">
+            <input id="roominfo" type="text" class="form-control" th:value="${roominfo}" readonly="readonly">
+          	<input th:value="${roomid}" style="display:none" name="roomid"><div id="roomid" th:text="${roomid}" style="display:none"></div>
+          </div>
+          <div class="form-group">
+			<input id="sdate" type="text" class="form-control col-md-5" placeholder="예약 시작일" name="sdate" style="display:inline-block;" readonly="readonly">
+			<input id="edate" type="text" class="form-control col-md-5" placeholder="예약 마지막일" name="edate" style="display:inline-block;" readonly="readonly">
+          </div>
+          <div class="form-group">
+          <span>인원수</span>
+            <div class="form-field">
+				<div class="select-wrap">
+					<div id="addprice" th:text="${addprice}" style="display:none"></div>
+					<div id="basicprice" th:text="${totalprice}" style="display:none"></div>
+					<select name="cnt" id="cnt" class="form-control" onchange="changeCnt(this)">
+					<div th:each="li:${people}">
+						<option  th:value="${li}" th:text="${li}"></option>
+					</div>
+					</select>
+				</div> 
+			</div>
+          </div>
+          <div class="form-group">
+            <input id="totalprice" type="text" class="form-control" th:value="${totalprice}" name="totalprice">
+          </div>
+        </form>
+        </div>
+        	<button id="payBtn" onclick="requestPay()" class="btn btn-primary justify-content-center" style="display:inline-block; float:right; margin-right:10%;">결제하기</button>
+        </div>
+      </div>
+
+   </div>
+ </div>
+</section>
+
+ <script src="/js/calender.js"></script>

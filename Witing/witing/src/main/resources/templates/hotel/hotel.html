@@ -1,0 +1,202 @@
+<link rel="stylesheet" th:href="@{/css/hotel.css}">
+
+<script>
+
+function movePage(uri, queryString) {
+    console.log(uri);
+    console.log(queryString);
+
+    location.href = uri + queryString;
+}
+
+function addlike(cust_id, hotel_id){
+
+	$.ajax({
+		url:'[[@{/addlike}]]',
+		data:{
+			'custid':cust_id,
+			'hotelid':hotel_id,		
+		},
+		success:function(data){
+
+            var id = '#heartbtn'+data[0];
+			if(data[1] == -1){
+				$(id).attr('class','fa fa-heart-o');
+				alert("likelist에서 삭제되었습니다.");
+			}else{
+			    $(id).attr('class','fa fa-heart');
+				alert("likelist에 담겼습니다.");
+			}
+		}
+		
+	});
+	
+};
+
+$(document).ready(function(){
+	$('#search_btn').click(function(){
+		var sdate = document.getElementById("sdate");
+		var edate = document.getElementById("edate");
+		if(sdate.value == "" || edate.value == ""){
+			alert('날짜를 선택해주세요.');
+			return false;
+		}
+	})
+	var custid = $('#custid').text();
+	if(custid != ''){
+		$.ajax({
+			url:'[[@{/likehearts}]]',
+			data:{custid:custid},
+			success:function(result){
+				$.each(result,function(i,hodelid){
+					var id = '#heartbtn'+hodelid;
+					$(id).attr('class','fa fa-heart');
+				});
+			}
+		});
+	}
+});
+
+</script>
+
+ <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/hotel/jeju.jpg');">
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+       <p class="breadcrumbs"><span class="mr-2"><a th:href="@{/main}">Home <i class="fa fa-chevron-right"></i></a></span> <span><a th:href="@{/hotel}">Hotel <i class="fa fa-chevron-right"></i></a></span></p>
+       <h1 class="mb-0 bread">Hotel</h1>
+     </div>
+   </div>
+ </div>
+</section>
+
+<section id="search_s" class="ftco-section ftco-no-pb">
+ <div class="container">
+  <div class="row">
+   <div class="col-md-12">
+    <div class="search-wrap-1 ftco-animate">
+     <form action="/searchimpl" class="search-property-1" id="search_form">
+      <div class="row no-gutters">
+       <div class="col-lg d-flex">
+        <div class="form-group p-4 border-0">
+         <label for="#">Destination</label>
+         <div class="form-field">
+		    <div class="select-wrap">
+		      <div class="icon" style="width:10%;"><span class="fa fa-chevron-down"></span></div>
+		      <select name="cityid" id="cityid" class="form-control">
+		        <option value="0">CITY</option>
+		        <option th:each="ci:${city}" th:text=${ci.name} th:value="${ci.cityid}" th:id="${ci.cityid}">city</option>
+		      </select>
+		    </div>
+		  </div>
+       </div>
+     </div>
+     <div class="col-lg d-flex">
+      <div class="form-group p-4">
+       <label for="#">Check-in date</label>
+       <div class="form-field">
+         <div class="icon" style="width:10%;"><span class="fa fa-calendar"></span></div>
+         <input type="text" class="form-control checkin_date" placeholder="Check In Date" id="sdate" name="sdate">
+       </div>
+     </div>
+   </div>
+   <div class="col-lg d-flex">
+    <div class="form-group p-4">
+     <label for="#">Check-out date</label>
+     <div class="form-field">
+       <div class="icon" style="width:10%;"><span class="fa fa-calendar"></span></div>
+       <input type="text" class="form-control checkout_date" placeholder="Check Out Date" id="edate" name="edate">
+     </div>
+   </div>
+ </div>
+ <div class="col-lg d-flex">
+  <div class="form-group p-4">
+   <label for="#">CATEGORY</label>
+   <div class="form-field">
+     <div class="select-wrap">
+      <div class="icon" style="width:10%;"><span class="fa fa-chevron-down"></span></div>
+      <select name="cateid" id="cateid" class="form-control">
+        <option value="0">CATEGORY</option>
+        <option th:each="ca:${cate}" th:text=${ca.catename} th:value="${ca.cateid}" id="cateid"></option>
+      </select>
+    </div>
+  </div>
+</div>
+</div>
+<div class="col-lg d-flex">
+  <div class="form-group d-flex w-100 border-0">
+   <div class="form-field w-100 align-items-center d-flex">
+    <input id="search_btn" type="submit" value="Search" class="align-self-stretch form-control btn btn-primary">
+     <div id="custid" th:if="${session.logincust != null}" style="display:none;" th:text="${session.logincust.custid}">
+  </div>
+  </div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="ftco-section">
+ <div class="container">
+  <div class="row">
+  
+   <div class="col-md-4 ftco-animate" th:each="li:${list}">
+    <div class="project-wrap hotel">
+     <a th:href="@{/room(hotelid=${li.hotelid})}" class="img" th:style="|background-image: url(/images/hotel/${li.hotelimg1});|">
+      <span class="price" th:text="${li.name}"></span>
+    </a>
+    <div class="text p-4">
+      <p class="star mb-2">
+        <span class="fa fa-star"></span>
+        <span class="fa fa-star"></span>
+        <span class="fa fa-star"></span>
+        <span class="fa fa-star"></span>
+        <span class="fa fa-star"></span>
+      </p>
+		
+      <!-- <span class="days">8 Days Tour</span> -->
+      
+	  <div class="like" th:if="${session.logincust != null}">
+          <a th:onclick="addlike([[${session.logincust.custid}]],[[${li.hotelid}]]);" data-toggle="tooltip" data-placement="left" title="Like" id="like">
+          <i class="fa fa-heart-o" th:id="|heartbtn${li.hotelid}|" style="color:red" alt=""></i>
+          </a>
+      </div>
+      <h3><a th:href="@{/room(hotelid=${li.hotelid})}" th:text="${li.hotelname}" style="font-size: 20px;"></a></h3>
+      <p class="location"><span class="fa fa-map-marker" th:text="' '+${li.detail}"></span></p>
+      <ul>
+       <li><span class="fa fa-check-square-o"><li th:text="${li.feature}" style="font-size: 13px;"></li></span></li>
+     </ul>
+   </div>
+ </div>
+</div>
+</div>
+
+<div class="block-27" id="pagebtn">
+      <ul>
+		<th:block th:if="${pageMaker.prev}">
+        	<li class="pageMaker_btn prev">
+        		<a href="javascript:void(0)" th:onclick="movePage([[${#request.requestURI}]], [[${pageMaker.crihotel.makeQueryString(pageMaker.pageStart - 1)}]])">&lt;</a>
+        	</li>
+        </th:block>
+        
+        <th:block th:with="pageMaker = ${pageMaker}">
+		    <th:block th:each="num : *{#numbers.sequence(pageMaker.pageStart, pageMaker.pageEnd)}">
+		        <li class="pageMaker_btn" th:classappend="${pageMaker.crihotel.pageNum == num} ? 'active' : ''">
+		            <a href="javascript:void(0)"  th:text="${num}" th:onclick="movePage([[${#request.requestURI}]],[[${pageMaker.crihotel.makeQueryString(num)}]])">1</a>
+		        </li>
+		    </th:block>
+		</th:block>
+		
+		<th:block th:if="${pageMaker.next}">
+		    <li class="pageMaker_btn next">
+		        <a href="javascript:void(0)" th:onclick="movePage([[${#request.requestURI}]], [[${pageMaker.crihotel.makeQueryString(pageMaker.pageEnd + 1)}]])">&gt;</a>
+		    </li>
+		</th:block>
+      </ul>
+    </div>
+</div>
+</section>
+

@@ -1,0 +1,64 @@
+<link rel="stylesheet" th:href="@{/css/about.css}">
+
+<script>
+
+function del(like_id){
+	var cust_id='[[${session.logincust.custid}]]';
+	var c = confirm('삭제 하시겠습니까?');
+	if(c==true){
+		location.href='[[@{/deletelike?like_id=}]]'+like_id+'&[[@{cust_id=}]]'+cust_id;
+	}
+}
+
+</script>
+
+<section class="ftco-section contact-section ftco-no-pt" style="color: white">
+  <div class="container">
+    <div class="row block-9">
+      <div class="col-md-12 order-md-last d-flex">
+        <form action="#" class="bg-light p-5 contact-form">
+          
+          <div class="form-group">
+          	<h3 class="fa fa-heart" id="heartbtn"></h3> <h3 class="fa fa-heart-o" id="heartbtn2"></h3>
+            <h3 th:text = "${session.logincust.custname} + ' 님의 Like List'"></h3>
+            <br>
+            <h2></h2>
+            <h2></h2>
+            
+            <div class="row">
+            <div class="col-md-4 ftco-animate" th:each="li:${list}">
+			    <div class="project-wrap hotel">
+			     <a th:href="@{/room(hotelid=${li.hotelid})}" class="img" th:style="'background-image:url('+ @{'images/hotel/'+${li.hotelimg1}} +');'">
+			      <span class="price" th:text="${li.name}"></span>
+			    </a>
+			    <div class="text p-4">
+			      <p class="star mb-2">
+			        <span class="fa fa-star"></span>
+			        <span class="fa fa-star"></span>
+			        <span class="fa fa-star"></span>
+			        <span class="fa fa-star"></span>
+			        <span class="fa fa-star"></span>
+			      </p>
+			      
+			      <div class="like">
+			          <a th:onclick="del([[${li.likeid}]]);" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-heart" id="likedel" alt=""></i></a>
+			      </div>
+			      
+			      <h3><a th:href="@{/room(hotelid=${li.hotelid})}" th:text="${li.hotelname}" style="font-size: 20px;"></a></h3>
+			      <p class="location"><span class="fa fa-map-marker" th:text="' '+${li.detail}" style="color: gray;"></span></p>
+			      <ul>
+       				<li><span class="fa fa-check-square-o"><li th:text="${li.feature}" style="font-size: 13px;"></li></span></li>
+			     </ul>
+			   </div>
+			 </div>
+			</div>
+		   </div>
+            
+          </div>
+        </form>
+        
+      </div>
+   </div>
+ </div>
+</section>
+

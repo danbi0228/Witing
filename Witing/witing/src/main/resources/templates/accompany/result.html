@@ -1,0 +1,248 @@
+<link rel="stylesheet" th:href="@{/css/result.css}">
+
+<!-- Google Tag Manager -->
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-PB6ZMD7');</script>
+	<!-- End Google Tag Manager -->
+	
+<script>
+$(document).ready(function(){
+	var mtype = $('#mbti_type').text();
+	$('#'+mtype).addClass('on');
+})
+
+function onClick_clipboard(){
+		var varUA = navigator.userAgent.toLowerCase();
+    var copyText = document.getElementById("clipboard");
+    var isIOS = (varUA.indexOf('android') > -1) ? false : true;
+    if(isIOS){
+        iosCopyToClipboard(copyText);
+    }else{
+        copyToClipboard(copyText);
+    }
+    alert("copy 되었습니다.");
+    return false;
+}
+ 
+// ios가 아닐 때
+function copyToClipboard(copyText){
+    copyText.select();
+    document.execCommand("copy");
+}
+ 
+// ios 일때
+function iosCopyToClipboard(el) {
+    var oldContentEditable = el.contentEditable,
+        oldReadOnly = el.readOnly,
+        range = document.createRange();
+ 
+    el.contentEditable = true;
+    el.readOnly = false;
+    range.selectNodeContents(el);
+ 
+    var s = window.getSelection();
+    s.removeAllRanges();
+    s.addRange(range);
+ 
+    el.setSelectionRange(0, 999999);
+ 
+    el.contentEditable = oldContentEditable;
+    el.readOnly = oldReadOnly;
+ 
+    document.execCommand('copy');
+}
+</script>
+
+
+ <!-- END nav -->
+ 
+ <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/mbti_bg.jpeg');">
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+       <p class="breadcrumbs"><span class="mr-2"><a th:href="@{/}">Home <i class="fa fa-chevron-right"></i></a></span> <span><a th:href="@{/mbti}">MBTI <i class="fa fa-chevron-right"></i></a></span><span> <a th:href="@{/#}" th:text="${mbtiType}"> <i class="fa fa-chevron-right"></i></a></span></p>
+       <h1 class="mb-0 bread">Witing-MBTI</h1>
+     </div>
+   </div>
+ </div>
+</section>
+
+
+	<div class="result-wrap">
+	  <div id="mbti_type" th:text="${mbtiType}" hidden="hidden"></div>
+	  <div th:text="${session.logincust.custid}" hidden="hidden"></div>
+		<div id="ENFJ" class="result-box">
+			<div class="type" style="color:#4CAF50"><img src="/images/mbti_img/enfj.png" alt="" style="width: 70px;margin-top: -10px;">ENFJ<img src="/images/mbti_img/enfj.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			책임감이 강하면서 배려를 잘해주는 <strong>ENFJ</strong>는 상대가 즐거워야 자신도 즐거워지는 타입입니다. 이타적인 성향이 강한 <strong>ENFJ</strong>는 모두가 만족할 수 있는 여행을 선호하는 편입니다.<br><br>
+			이런 성향을 가진 <strong>ENFJ</strong>에게 깊고 푸른 바다를 보면서 특별한 추억을 쌓을 수 있는 <strong>속초</strong>와 여유롭고 도시가 주는 따뜻한 울림을 느낄 수 있는 호주의 <strong>멜버른</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=5}">강원</a> 속초 / 호주 멜버른</div>
+			<div class="type-img"><img src="/images/mbti_img/enfj_img.jpg" alt=""></div>
+			</div>
+			
+		</div>
+
+		<div id="ESFJ" class="result-box">
+			<div class="type" style="color:#50BCDF"><img src="/images/mbti_img/esfj.png" alt="" style="width: 70px;margin-top: -10px;margin-right: 10px;">ESFJ<img src="/images/mbti_img/esfj.png" alt="" style="width: 70px;margin-top: -10px;margin-left: 10px;"></div>
+			<div class="type-text">
+			외향적이면서 여러 사람과 어울리는 것을 좋아하는 <strong>ESFJ</strong>는 혼자 여행하는 것보다는 일행이 있는 여행을 가는 것이 적합합니다. 혼자 여행을 가도 워낙 사교성이 좋아 금방 동행을 만들 수 있습니다.<br><br>
+			이런 성향을 가진 <strong></strong>에게 다양한 체험과 아름다운 풍경을 느낄 수 있는 <strong>제주도</strong>와 넘치는 에너지를 통해 놀라운 경험을 할 수 있는 태국의 <strong>방콕</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=9}">제주도</a> / 태국 방콕</div>
+			<div class="type-img"><img src="/images//mbti_img/esfj_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ESTJ" class="result-box">
+			<div class="type" style="color:#50BCDF"><img src="/images/mbti_img/estj.png" alt="" style="width: 70px;margin-top: -10px;">ESTJ<img src="/images/mbti_img/estj.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			추진력이 강하고 리더십이 있는 <strong>ESTJ</strong>는 외향적이면서 계획적인 성격입니다. 또한 호불호도 크기 때문에 자신의 취향에 맞는 여행지만 쭈욱 고집하는 경향이 있습니다.<br><br>
+			이런 성향을 가진 <strong>ESTJ</strong>에게 바다가 가까이 있고 즐길 거리도 많은 <strong>부산</strong>과 다양성과 짜릿함이 공존하는 미국의 <strong>뉴욕</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=8}">부산</a> / 미국 뉴욕</div>
+			<div class="type-img"><img src="/images//mbti_img/estj_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ENTP" class="result-box">
+			<div class="type" style="color:#BC8AC2"><img src="/images/mbti_img/entp.png" alt="" style="width: 70px;margin-top: -10px;">ENTP<img src="/images/mbti_img/entp.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			상상력이 풍부하면서 다방면에 관심을 가지고 있는 <strong>ENTP</strong>는 박식하면서 팔방미인인 성격입니다. 가만히 있는 것보다 여기저기 떠나는 것을 좋아하는데,<br><br>
+			이런 성향을 가진 <strong>ENTP</strong>에게 다양한 섬으로 떠날 수 있는 <strong>통영</strong>과 빠르게 움직이는 도시의 속도를 느낄 수 있는 일본의 <strong>도쿄</strong>를 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=7}">경남</a> 통영 / 일본 도쿄</div>
+			<div class="type-img"><img src="/images//mbti_img/entp_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ENFP" class="result-box">
+			<div class="type" style="color:#4CAF50"><img src="/images/mbti_img/enfp.png" alt="" style="width: 70px;margin-top: -10px;">ENFP<img src="/images/mbti_img/enfp.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			정열적이면서 활기가 넘치면서 감수성이 풍부한 <strong>ENFP</strong>는 새로운 곳으로 가서 경험하는 것을 좋아합니다. 이런 <strong>ENFP</strong>는 그냥 가만히 둬도 알아서 잘 노는 성격인데, <br><br>
+			이런 성향을 가진 <strong>ENFP</strong>에게 감성을 자극하는 밤바다를 볼 수 있는 <strong>여수</strong>와 새로운 모험과 글로벌 시민이 될 수 있는 필리핀의 <strong>보라카이</strong>를 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=6}">전남</a> 여수 / 필리핀 보라카이</div>
+			<div class="type-img"><img src="/images/mbti_img/enfp_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ESFP" class="result-box">
+			<div class="type"><img src="/images/mbti_img/esfp.png" alt="" style="width: 70px;margin-top: -10px;">ESFP<img src="/images/mbti_img/esfp.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			자유로운 영혼을 가지고 있으면서 사교적이고 유행에 민감한 <strong>ESFP</strong>는 눈에 띄는 것을 좋아합니다. <br><br>
+			이런 성향을 가진 <strong>ESFP</strong>에게 언제든지 떠날 수 있는 공항이 있는 <strong>인천</strong>과 땅, 바다, 공중 어디에든 모두 할 수 있는 것이 넘치는 홍콩의 <strong>마카오</strong>를 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=3}">인천</a> / 홍콩 마카오</div>
+			<div class="type-img"><img src="/images/mbti_img/esfp_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ESTP" class="result-box">
+			<div class="type"><img src="/images/mbti_img/estp.png" alt="" style="width: 70px;margin-top: -10px;">ESTP<img src="/images/mbti_img/estp.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			개방적이면서 모르는 사람들과도 스스럼없이 친해지는 <strong>ESTP</strong>는 스릴 있는 모험을 좋아합니다. 또한, 대담하고 용감하고 즉흥적인 동시에 자극적인 것을 좋아합니다.<br><br>
+			이런 성향을 가진 <strong>ESTP</strong>에게 파도를 온 몸으로 느낄 수 있는 서핑을 할 수 있는 <strong>양양</strong>과 태양과 모래, 해변을 즐길 수 있는 인도네시아의 <strong>발리</strong>를 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=5}">강원</a> 양양 / 인도네시아 발리</div>
+			<div class="type-img"><img src="/images/mbti_img/estp_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="INTP" class="result-box">
+			<div class="type" style="color:#BC8AC2"><img src="/images/mbti_img/intp.png" alt="" style="width: 70px;margin-top: -10px;">INTP<img src="/images/mbti_img/intp.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			조용하고 과묵하면서 논리적인 성격을 가지고 있는 <strong>INTP</strong>는 지적 호기심이 많은 편입니다. 남들과 어울리는 것보다는 혼자서 성찰하는 것을 좋아하므로 <strong>INTP</strong>는 혼자 여행을 가는 것을 선호합니다.<br><br>
+			이런 성향을 가진 <strong>INTP</strong>에게 백제의 역사가 살아 숨쉬고, 유유자적한 시간을 보낼 수 있는 <strong>부여</strong>와 평화와 고요함이 균형을 이루는 대만의 <strong>가오슝</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=4}">충남</a> 부여 / 대만 가오슝</div>
+			<div class="type-img"><img src="/images/mbti_img/intp_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="INFP" class="result-box">
+			<div class="type" style="color:#4CAF50"><img src="/images/mbti_img/infp.png" alt="" style="width: 70px;margin-top: -10px;">INFP<img src="/images/mbti_img/infp.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			세심하면서 감수성이 풍부한 <strong>INFP</strong>는 영화나 책에 나오는 인물에게 쉽게 매료가 되는 성격입니다.<br><br>
+			이런 성향을 가진 <strong>INFP</strong>에게 멜로영화 '8월의 크리스마스'의 촬영지인 <strong>군산</strong>과 파스텔 톤의 주택이 늘어서 있는 굴곡진 자갈길을 즐길 수 있는 포르투갈의 <strong>리스본</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=6}">전북</a> 군산 / 포르투갈 리스본</div>
+			<div class="type-img"><img src="/images/mbti_img/infp_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ISFP" class="result-box">
+			<div class="type"><img src="/images/mbti_img/isfp.png" alt="" style="width: 70px;margin-top: -10px;">ISFP<img src="/images/mbti_img/isfp.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			온화하면서 친절하고 혼자만의 시간을 보내는 것을 좋아하는 <strong>ISFP</strong>는 다양한 흥밋거리가 있는 곳을 선호합니다.<br><br>
+			이런 성향을 가진 <strong>ISFP</strong>에게 한옥마을의 고즈넉한 분위기를 느낄 수 있는 <strong>전주</strong>와 미적인 자연이 주는 아름다움을 느낄 수 있는 캄보디아의 <strong>시엠립</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=6}">전북</a> 전주 / 캄보디아 시엠립</div>
+			<div class="type-img"><img src="/images/mbti_img/isfp_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ISTP" class="result-box">
+			<div class="type"><img src="/images/mbti_img/istp.png" alt="" style="width: 70px;margin-top: -10px;">ISTP<img src="/images/mbti_img/istp.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			호기심이 강하면서 이성적인 <strong>ISTP</strong>는 조금만 움직여도 금방 피로를 느끼는 스타일이기 때문에 동선이 너무 복잡하지 않은 여행을 떠나는 것이 좋습니다.<br><br>
+			이런 성향을 가진 <strong>ISTP</strong>에게 역사와 행궁동 카페거리를 동시에 느낄 수 있는 <strong>수원</strong>과 과거와 현재가 공존해 다양함을 느낄 수 있는 영국의 <strong>런던</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=2}">경기</a> 수원 / 영국 런던</div>
+			<div class="type-img"><img src="/images/mbti_img/istp_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="INTJ" class="result-box">
+			<div class="type" style="color:#BC8AC2"><img src="/images/mbti_img/intj.png" alt="" style="width: 70px;margin-top: -10px;">INTJ<img src="/images/mbti_img/intj.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			논리적이면서 이성적인 <strong>INTJ</strong>는 신중한 성격입니다. 그러면서 합리적인 것을 추구하는 성격과 약간의 즉흥적인 것을 수용합니다.<br><br>
+			이런 성향을 가진 <strong>INTJ</strong>에게 상쾌한 공기를 쐴 수 있는 소나무 숲과 봄에는 산수유와 매화를 즐길 수 있는 <strong>구례</strong>와 다양한 인종을 통해 많은 영감을 불러 일으킬 수 있는 <strong>싱가포르</strong>를 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=6}">전남</a> 구례 / 싱가포르</div>
+			<div class="type-img"><img src="/images/mbti_img/intj_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="INFJ" class="result-box">
+			<div class="type" style="color:#4CAF50"><img src="/images/mbti_img/infj.png" alt="" style="width: 70px;margin-top: -10px;">INFJ<img src="/images/mbti_img/infj.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			온화하면서 몽환적인 느낌을 가진 <strong>INFJ</strong>는 갈등이 생기는 것을 좋아하지 않는 평화주의자입니다. 그렇기 때문에 여러 상황변수가 생기는 것을 좋아하지 않습니다.<br><br>
+			이런 성향을 가진 <strong>INFJ</strong>에게 분주한 마음을 달랠 수 있는 고요한 대나무 숲이 있는 <strong>담양</strong>과 넓은 도로망이 펄쳐져 20년에 걸쳐 완성된 계획도시인 인도의 <strong>뉴델리</strong>를 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=6}">전남</a> 담양 / 인도 뉴델리</div>
+			<div class="type-img"><img src="/images/mbti_img/infj_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ISFJ" class="result-box">
+			<div class="type" style="color:#50BCDF"><img src="/images/mbti_img/isfj.png" alt="" style="width: 70px;margin-top: -10px;">ISFJ<img src="/images/mbti_img/isfj.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			섬세하면서 계획적인 <strong>ISFJ</strong>는 차분하면서 조용한 성격입니다. 너무 활기찬 곳보다는 조용한 곳에서 휴식을 하는 것을 더 좋아하는 성격을 가지고 있습니다.<br><br>
+			이런 성향을 가진 <strong>ISFJ</strong>에게 신라의 천년의 밤을 만날 수 있는 동궁과 월지가 있는 <strong>경주</strong>와 알록달록하고 오래된 중세 시대의 반목조 건물을 그대로 간직하고 있는 프랑스의 <strong>루앙</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=7}">경북</a> 경주 / 프랑스 루앙</div>
+			<div class="type-img"><img src="/images/mbti_img/isfj_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ISTJ" class="result-box">
+			<div class="type" style="color:#50BCDF"><img src="/images/mbti_img/istj.png" alt="" style="width: 70px;margin-top: -10px;">ISTJ<img src="/images/mbti_img/istj.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			신중하면서 현실적인 감각을 지닌 <strong>ISTJ</strong> 타입은 내향적이지만 규칙을 잘 준수하는 모범적인 성격입니다. 여행을 할 때 ISTJ는 동행이나 자신을 지킬 수 있는 곳에서 편안함을 느낍니다.<br><br>
+			이런 성향을 가진 <strong>ISTJ</strong>에게 울창한 소나무 숲과 아름다운 동해 바다를 동시에 느낄 수 있는 <strong>강릉</strong>과 일년 내내 여름과 바다를 즐길 수 있는 <strong>사이판</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=5}">강원</a> 강릉 / 사이판</div>
+			<div class="type-img"><img src="/images/mbti_img/istj_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<div id="ENTJ" class="result-box">
+			<div class="type" style="color:#BC8AC2"><img src="/images/mbti_img/entj.png" alt="" style="width: 70px;margin-top: -10px;">ENTJ<img src="/images/mbti_img/entj.png" alt="" style="width: 70px;margin-top: -10px;"></div>
+			<div class="type-text">
+			열정적인 <strong>ENTJ</strong>는 겉으로 봤을 때는 다소 이기적인 면모가 보일 수 있지만 의외로 상대를 잘 배려해 주는 의리 있는 성격입니다. 여행을 주도하는 편인 <strong>ENTJ</strong>는 여행 메이트로 좋은 타입입니다.<br><br>
+			이런 성향을 가진 <strong>ENTJ</strong>에게 짜릿한 스릴을 느낄 수 있는 빠지와 번지점프, 캠핑이 가능한 <strong>가평</strong>과 휴양과 액티비티를 동시에 즐길 수 있는 베트남의 <strong>다낭</strong>을 추천합니다.
+			<div class="type-city"><a th:href="@{/cityshotel?cityid=2}">경기</a> 가평 / 베트남 다낭</div>
+			<div class="type-img"><img src="/images/mbti_img/entj_img.jpg" alt=""></div>
+			</div>
+		</div>
+
+		<a th:href="@{/mbti}" class="btn-reset">테스트 다시하기 ></a>
+	</div>
+<input type="hidden" id="clipboard" value="http://localhost/mbti/">
+
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PB6ZMD7"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+

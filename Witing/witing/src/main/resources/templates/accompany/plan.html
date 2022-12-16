@@ -1,0 +1,347 @@
+<link rel="stylesheet" th:href="@{/css/plan.css}">
+
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+        Kakao.init('e1b32cf5d525af8ff59d5b3400b60ce4');
+        Kakao.isInitialized();  
+</script>
+<script>
+/* var images = ["bear2.png", "usercat.png", "usericon12.png", "usericon13.png", "usericon14.png", "usericon15.png", "usericon16.png", "usericon17.png", "usericon18.png", "usericon19.png"];
+
+
+$('#comimg').attr({src: "url(/images/user/" + images[Math.floor(Math.random() * images.length)] + ")"}); */
+
+
+function kakaotemp(){
+	Kakao.Share.sendCustom({
+		  templateId: 86107,
+		});
+}
+
+function kakaos(){
+	Kakao.Share.sendScrap({
+		  requestUrl: 'https://localhost/accompany',
+		});
+};
+
+function clip(){
+	var url = 'http://localhost/accompany';
+	var textarea = document.createElement("textarea");
+	document.body.appendChild(textarea);
+	url = window.document.location.href;
+	textarea.value = url;
+	textarea.select();
+	document.execCommand("copy");
+	document.body.removeChild(textarea);
+	alert("주소가 복사되었습니다.")
+}
+
+function shareTwitter() {
+	var title = $('#plan_title').val;
+    window.open("http://twitter.com/share?url=" + encodeURIComponent(location.href) +"&text=" + document.title + ', ' + encodeURIComponent($("#plan_title").text()));
+}
+
+function shareNaverBlog() {
+	var title = $('#plan_title').val;
+	 window.open("https://share.naver.com/web/shareView.nhn?url=" + encodeURIComponent(location.href) + "&title=" + document.title + ", " + encodeURIComponent($("#plan_title").text()));
+}
+
+
+function displaymap(data){
+	// 마커를 표시할 위치와 title 객체 배열입니다 , 지도의 가운데 위치를 가져올 변수계산도 추가
+	var positions = [];
+	var centerx = 0, centery = 0;
+	for(var i=0; i<data.length; i++){
+		positions.push({
+			title:data[i].planname,
+			latlng: new kakao.maps.LatLng(data[i].planx,data[i].plany)
+		})
+		centerx += data[i].planx;
+		centery += data[i].plany;
+	}
+	if(data.length > 1){
+		centerx/=data.length;
+		centery/=data.length;
+	}
+	
+	/* KaKaoMap Start */
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(centerx, centery), // 지도의 중심좌표
+	        level: 6 // 지도의 확대 레벨
+	    };
+
+	var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다	
+
+	// 마커 이미지의 이미지 주소입니다
+	var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+	    
+	for (var i = 0; i < positions.length; i ++) {
+	    
+	    // 마커 이미지의 이미지 크기 입니다
+	    var imageSize = new kakao.maps.Size(24, 35); 
+	    
+	    // 마커 이미지를 생성합니다    
+	    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+	    
+	    // 마커를 생성합니다
+	    var marker = new kakao.maps.Marker({
+	        map: map, // 마커를 표시할 지도
+	        position: positions[i].latlng, // 마커를 표시할 위치
+	        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+	        image : markerImage // 마커 이미지 
+	    });
+	}
+}
+
+
+function mapmarker(){
+	$.ajax({
+		url:'/map?accomid='+$('#accomid').text(),
+		success:function(data){
+			displaymap(data);
+		}		
+	})
+}
+
+function re_delete_btn(replyid){
+	var c = confirm('삭제하시겠습니까?');
+	if(c == true){
+		var replyid = replyid;
+		var accomid = $('#accomid').text();
+		location.href="[[@{/delreply?replyid=}]]"+replyid+'&'+"[[@{accomid=}]]"+accomid;
+		alert('정상적으로 삭제되었습니다.');
+	}else{
+		alert('취소되었습니다.');
+	}
+}
+
+function update_btn(data){
+	/* alert(data); */
+}
+
+function re_update_btn(data){
+
+	var c = confirm('수정하시겠습니까?');
+	if(c == true){
+		var replyid = data;
+		var commentid = 'comment_reply'+data;
+		var accomid = $('#accomid').text();
+		var comment = $('#'+commentid).val();
+		var secret = $('input[name=up_secret]:checked').val(); 
+		alert(secret);
+		location.href="[[@{/updatereply?replyid=}]]"+replyid+"&[[@{accomid=}]]"+accomid+"&[[@{comment=}]]"+comment+"&[[@{secret=}]]"+secret;
+		alert('수정되었습니다.');
+	}else{
+		alert('취소되었습니다.');
+	}
+}
+
+/* var stompClient = null;
+
+function connect(){
+	var socket = new SockJS('http://127.0.0.1:8080/admin/ws');
+	stompClient = Stomp.over(socket);
+	
+	stompClient.connect({}, function(frame) {
+		console.log('Connected: ' + frame);
+		var custid = $('#custid').text();
+		var comment = $('#comment').val();
+		});
+		stompClient.send("/writereply", {}, check); 
+		
+	stompClient.subscribe('/replyresult', function(list) { 
+		for(var i=0; i<JSON.parse(list.body).length; i++){
+			var start = JSON.parse(list.body)[i].sdate;
+			var end = JSON.parse(list.body)[i].edate;
+			for(let i = parseInt(start.substr(8,10))+1; i <= parseInt(end.substr(8,10))+1; i++){
+				tdGroup[i].classList.add('reserved');
+    		}
+		}
+	});
+}
+ */
+
+$(document).ready(function(){
+	$('#reply_btn').click(function(){
+		var c = confirm('등록하시겠습니까?');
+		if(c == true){
+			var custid = '[[${session.logincust.custid}]]';
+			var accomid = $('#accomid').text();
+			var comment = $('#comment').val();
+			var secret = $('input[name=secret]:checked').val();
+			location.href="[[@{/replyimpl?custid=}]]"+custid+"&[[@{accomid=}]]"+accomid+"&[[@{comment=}]]"+comment+"&[[@{secret=}]]"+secret;
+			alert("정상적으로 등록되었습니다");
+			connect();
+		}else{
+			alert('취소되었습니다.');
+		}
+	})
+	
+	$('#del_btn').click(function(){
+		var c = confirm('삭제하시겠습니까?');
+		if(c == true){
+			var accomid = $('#accomid').text();
+			location.href="[[@{/deleteaccom?accomid=}]]"+accomid;
+			alert('정상적으로 삭제되었습니다.');
+		}else{
+			alert('취소되었습니다.');
+		}
+	});
+	
+	$('#donglechat').hide();
+	
+	$('#accom_btn').click(function(){
+		$('#donglechat').show();
+		
+	})
+	mapmarker();
+	
+});
+
+</script>
+
+
+<body>
+ <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/bg_4.jpg');">
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+       <p class="breadcrumbs"><span class="mr-2"><a th:href="@{/main}">Home <i class="fa fa-chevron-right"></i></a></span> <span class="mr-2"><a th:href="@{/accompany}">Accompany <i class="fa fa-chevron-right"></i></a></span> <span><a th:href="@{#}">Plan Details <i class="fa fa-chevron-right"></i></a></span></p>
+       <h1 class="mb-0 bread">Plan Details</h1>
+       <div id="accomid" style="display:none;" th:text="${accomid}"></div>
+     </div>
+   </div>
+ </div>
+</section>
+
+<section class="ftco-section ftco-no-pt ftco-no-pb">
+  <div class="container" id="container">
+    <div class="row">
+      <div class="col-lg-8 ftco-animate py-md-5 mt-md-5">
+        <h3 class="mb-3" th:text="${title}" id="plan_title">RoomType</h3>
+           <button th:if="${session.logincust.custid} == ${custid}" type="button" class="btn btn-primary" id="del_btn" style="float: right; margin-top: -50px; margin-right: 65px; color:white;">삭제</button>
+           <button type="button" class="btn btn-primary" style="float: right; margin-top: -50px" id="accomlistbtn"><a th:href="@{/accompany}" style="color:white">목록</a></button>
+        <div id="planinfo">
+        	<i class="fa fa-calendar" id="dateicon"><p th:text="| ${#dates.format(traveltime, 'yyyy-MM-dd')}|" id="date"></p></i><br>
+        	<i class="fa fa-users" id="user"> <p th:text="|모집인원 : ${cnt}명|" id="cnt"></p></i>
+        	<p></p>
+        </div>
+        <div th:each="todo:${list}">
+        <i class="fa fa-check" id="check"><span th:text="| ${todo.planname} : ${todo.todo}|" th:id="|plan+${todo.idx}" style="color:black;"></span></i><br>
+        </div>
+        <br><p th:text="${accomtext}" style="color:black;"></p>
+		
+		<div id="map" style="width:100%;height:400px;"></div>
+		
+      </div> <!-- .col-md-8 -->
+      
+      <div class="col-lg-4 sidebar ftco-animate bg-light py-md-5">
+  
+		<div class="sidebar-box ftco-animate">
+          <h3>User</h3>
+          <div class="block-21 mb-4 d-flex">
+            <a class="blog-img mr-4" style="background-image: url('/images/hotel/usercat2.png');"></a>
+            <div class="text">
+              <h3 class="heading"><a th:href="@{#}" th:text="${custid}"></a>
+              <span th:if="${certification != null}"><img src="/images/hotel/aaa2.jpg" th:if="${certification != null}" style="height: 20px; margin-left: 1%; margin-top: -1%"></span>
+              </h3>
+               <span th:if="${type != null}" th:text="${type}">MBTI</span><a th:href="@{/mbti}" th:if="${session.logincust != null}" id="mbti_btn"> MBTI</a>
+              <div class="meta">
+                <div><span class="fa fa-calendar"><span th:text="| ${#dates.format(birth, 'yyyy')}년생|"></span></span></div>
+                <div><span class="fa fa-venus-mars"><span th:text="| ${gender}|"></span></span></div>
+                <div><span class="fa fa-globe"><span th:text="| ${country}|"></span></span></div>
+              </div>
+            </div>
+          </div>
+          <div id="snslist" style="text-align: center;">
+	          <button type="button" onclick="clip(); return false;" id="linkbtn"><img src="/images/hotel/link.png" style="height: 35px;"></button>
+	          <button type="button" onclick="shareTwitter();" id="twitbtn"><img src="/images/hotel/twit.png" style="height: 40px; margin-left: -5%;"></button>
+	          <button type="button" onclick="shareNaverBlog();" id="blogbtn"><img src="/images/hotel/nblog.png" style="height: 40px; margin-left: -5%;"></button>
+	          <button type="button" onclick="kakaotemp()" id="kakaobtn"><img src="/images/hotel/katalk.png" style="height: 40px; margin-left: -5%;"></button>
+          </div>
+          <br>
+          <a th:href="@{#}" th:if="${session.logincust != null}" class="btn btn-primary" id="accom_btn">채팅하기</a><br><br>
+	        <div id="donglechat"><iframe src="https://service.dongledongle.com/bdb97" frameborder="0" width="100%" height="500"></iframe></div>
+        </div>
+        <div>
+      </div>
+    </div>
+    
+<!-- Comments section-->
+<section class="col-md-11">
+<h3 style="font-weight: bold; margin-left: 1%;">Comment</h3>
+   <div class="card bg-light">
+       <div class="card-body">
+           <!-- Comment form-->
+           <div class="comment_form">
+           <form class="col-md-11 text-margin" style="margin-bottom: 2%;">
+	           <textarea class="form-control" rows="3" placeholder="동행하고 싶다면 댓글을 남겨주세요 :)" name="comment" id="comment" style="display: inline-block;"></textarea>
+	           <div class="select" id="select_sc" style="float: right;">
+		           <input type="radio" name="secret" id="secret_y" value="y"> 비밀
+		           <input type="radio" name="secret" id="secret_n" value="n" checked> 공개
+	           </div>
+           </form>
+           <button type="button" class="btn btn-primary" id="reply_btn">작성하기</button>
+           <br>
+           </div>
+           <!-- Comment with nested comments-->
+           <div class="d-flex mb-8" th:each="reply:${reply}"><div id="replyid" hidden="hidden" th:text="${reply.replyid}"></div>
+               <!-- Parent comment-->
+               <div class="flex-shrink-0"><img class="rounded-circle" id="comimg" src="/images/user/bear2.png" style="width: 50px;" alt="..." /></div>
+               <div class="col-md-8">
+                   <div class="fw-bold" th:text="${reply.custid}" id="re_custid"></div>
+                    <span th:if="${reply.secret == 'y'}" class="fa fa-lock" style="display: inline-block;"></span>
+                    <div style="font-size: 13px; margin-left:2.5%; margin-top: 3px;">
+                    <p th:text="${#dates.format(reply.cdate, 'yyyy-MM-dd HH:mm:ss')}" style="display: inline-block; margin-right: 1%;"></p>
+                    <button type="button" id="update_btn" th:onclick="|update_btn([[${reply.replyid}]])|" th:if="${session.logincust.custid} == ${reply.custid}" data-toggle='modal' th:data-target='|#modifyModal${reply.replyid}|'>수정</button>
+                    <button type="button" id="delete_btn" th:onclick="|re_delete_btn([[${reply.replyid}]])|" th:if="${session.logincust.custid} == ${reply.custid}">삭제</button>
+                    </div>
+                    <div th:if="${reply.secret == 'y'}">
+                    	<p th:if="${session.logincust.custid} != ${reply.custid} and ${session.logincust.custid} != ${custid}" style="margin-left: 15px; color: gray;">비밀 댓글입니다.</p>
+                   		<div th:if="${session.logincust.custid} == ${reply.custid} or ${session.logincust.custid} == ${custid}">
+	                   		<p th:text="${reply.comment}" style="margin-left: 15px; color: black"></p><div id="replylid" style="display: none;" th:text="${replylid}"></div>
+                    	</div>
+                    </div>
+                    <div th:if="${reply.secret == 'n'} or ${reply.secret == null}">
+	                   <p th:text="${reply.comment}" style="margin-left: 15px; color: black"></p><div id="replylid" style="display: none;" th:text="${replylid}"></div>
+                    </div>
+               </div>
+               
+               <div class="modal fade" th:id="|modifyModal${reply.replyid}|" role="dialog">
+				  <div class="modal-dialog">
+				      <div class="modal-content">
+				          <div class="modal-header">
+				              <h5 class="modal-title">댓글 수정하기</h5><div th:id="replyid" hidden="hidden" th:text="${reply.replyid}"></div>
+				              <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          </div>
+					          <div class="modal-body">
+					          <form id="replyupdate_form">
+					              <div class="form-group">
+					                  <label for="replyText">댓글 내용</label>
+					                  <textarea class="form-control" rows="4" th:id="|comment_reply${reply.replyid}|" th:value="${reply.comment}" th:text="${reply.comment}" name="comment"></textarea>
+					              </div>
+					              <div class="select" id="update_sc" style="float: right;">
+							           <input type="radio" name="up_secret" id="update_y" value="y"> 비밀
+							           <input type="radio" name="up_secret" id="update_n" value="n"> 공개
+						          </div>
+					          </form>
+					          </div>
+				          <div class="modal-footer">
+				              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+				              <button type="button" class="btn btn-primary modalModBtn" th:id="|modal_update${reply.replyid}|" th:onclick="|re_update_btn([[${reply.replyid}]])|">수정</button>
+				          </div>
+				      </div>
+				  </div>
+				</div>
+            </div>
+        </div>
+    </div>
+    
+</section>
+    
+  </div>
+  </div>
+</section> <!-- .section -->
+</body>
+

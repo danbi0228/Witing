@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.mapper.HotelMapper">
+	
+	<select id="select" parameterType="Integer" resultType="HotelDTO">
+		SELECT * FROM hotel WHERE hotelid=#{hotelid}
+	</select>
+	<select id="selectall" resultType="HotelDTO">
+		SELECT * FROM hotel
+	</select>
+	<insert id="insert" parameterType="HotelDTO">
+		INSERT INTO hotel VALUES (NULL,#{cityid},#{cateid},#{hotelname},
+								#{detail},#{hotelimg1},#{hotelimg2},#{feature})
+	</insert>
+	<update id="update" parameterType="HotelDTO">
+		UPDATE hotel SET cityid=#{cityid},cateid=#{cateid},hotelname=#{hotelname},detail=#{detail},
+		hotelimg1=#{hotelimg1}, hotelimg2=#{hotelimg2}, feature=#{feature} WHERE hotelid=#{hotelid}
+	</update>
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM hotel WHERE hotelid=#{hotelid}
+	</delete>
+	<select id="hotelcity" parameterType="Integer" resultType="HotelDTO">
+		SELECT * FROM hotel h
+		INNER JOIN city c ON h.cityid = c.cityid
+	</select>
+	<select id="searchhotel" resultType="HotelDTO">
+		SELECT DISTINCT ho.hotelid, ci.cityid, ca.cateid, ho.hotelname, ho.detail, ho.hotelimg1, ho.hotelimg2,
+		ho.feature, ca.catename, ci.name, ci.img FROM hotel ho
+		INNER JOIN cate ca ON ho.cateid = ca.cateid
+		INNER JOIN city ci ON ho.cityid = ci.cityid
+		INNER JOIN room ro ON ho.hotelid = ro.hotelid
+		WHERE (#{cityid} = 0 OR ho.cityid IN (#{cityid}))
+		AND (#{cateid} = 0 OR ho.cateid IN (#{cateid}))
+		AND ro.roomid NOT IN (SELECT roomid FROM orderlist WHERE sdate BETWEEN #{sdate} AND #{edate})
+		ORDER BY ho.hotelid LIMIT #{crihotel.skip}, #{crihotel.amount}
+	</select>
+	
+	<select id="cityshotel" parameterType="Integer" resultType="HotelDTO">
+		SELECT * 
+		  FROM hotel h
+		       INNER JOIN city c ON h.cityid = c.cityid
+		 WHERE c.cityid = #{cityid}
+	</select>
+	 
+	<select id="hotelpage" resultType="HotelDTO">
+        SELECT * FROM hotel h
+        INNER JOIN city c ON h.cityid = c.cityid
+        ORDER BY hotelid LIMIT #{skip}, #{amount}
+    </select>
+    <select id="hotelcnt" resultType="Integer">
+        SELECT count(DISTINCT hotelid) FROM hotel
+    </select>
+    
+    <select id="searchhotelcnt" resultType="Integer">
+        SELECT count(DISTINCT ho.hotelid) FROM hotel ho
+		INNER JOIN cate ca ON ho.cateid = ca.cateid
+		INNER JOIN city ci ON ho.cityid = ci.cityid
+		INNER JOIN room ro ON ho.hotelid = ro.hotelid
+		WHERE (#{cityid} = 0 OR ho.cityid IN (#{cityid}))
+		AND (#{cateid} = 0 OR ho.cateid IN (#{cateid}))
+		AND ro.roomid NOT IN (SELECT roomid FROM orderlist WHERE sdate BETWEEN #{sdate} AND #{edate})
+    </select>
+    
+    <select id="cityshotelcnt" resultType="Integer">
+        SELECT count(DISTINCT h.hotelid) FROM hotel h
+		INNER JOIN city c ON h.cityid = c.cityid
+		WHERE c.cityid = #{cityid}
+		ORDER BY h.hotelid LIMIT #{crihotel.skip}, #{crihotel.amount}
+    </select>
+</mapper>

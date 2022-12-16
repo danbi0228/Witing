@@ -1,0 +1,138 @@
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+
+<script>
+$(document).ready(function(){
+
+	var time = 60;
+	var min = "";
+	var sec = "";
+	
+	$("#compare_ok").hide();
+	$("#compare_wrong").hide();
+	$("#sendMail").click(function() {// 메일 입력 유효성 검사
+		var mail = $("#mail").val(); //사용자의 이메일 입력값. 
+		$.ajax({
+			type : 'post',
+			url : '/CheckMail',
+			data : {
+				mail : mail
+				},
+			/* dataType :'json', */
+		 	success : function(key){
+		 		$('#ok_btn').click(function(){
+			 			if ($("#compare").val() == key) {   //인증 키 값을 비교를 위해 텍스트인풋과 벨류를 비교
+			 				alert("본인인증이 정상적으로 되었습니다.")
+			 				
+			 				$('#email_form').attr({
+			 					'data' : {
+			 						'certification' : "1"
+			 					},
+				 				'method':'post',
+								'action':'[[@{/mypage?custid=}]]'+'[[@{${cust.custid}}]]'+'&'+'[[@{certification=1}]]'
+				 			});
+				 			$('#email_form').submit();
+			 			} else {
+			 				alert("인증번호가 일치하지 않습니다.")
+			 				
+			 				$('#email_form').attr({
+				 				'method':'post',
+								'action':'[[@{/mypage(custid=${cust.custid})}]]'
+				 			});
+				 			$('#email_form').submit();
+			 			}
+		 		})
+			}
+		});
+		alert("인증번호가 전송되었습니다.") 
+		
+		/* 유효시간 타이머 */
+		var x = setInterval(function(){
+			min = parseInt(time/60);
+			sec = time % 60;
+			document.getElementById("time").innerHTML = "유효시간 : " + min + "분" + sec + "초";
+			time--;
+			
+			if(time < 0){
+				clearInterval(x);
+				document.getElementById("time").innerHTML = "시간초과"; 
+				document.getElementById("sendMail").innerHTML = "인증번호 재요청";
+				document.getElementById("compare").disabled = true;	// 유효시간 지나면 입력못하게 비활성화
+				alert("유효시간이 초과되었습니다.");
+				/* $('#sendMail').attr("disabled","disabled"); */
+				time = 60;
+			}
+		}, 1000);
+		
+		
+	});
+})
+
+</script>
+
+<div class="modal fade" id="emailModal" role="dialog">
+    <div class="modal-dialog modal-2sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>이메일 본인인증 : )</div>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        
+        <div class="modal-body">
+        <form id="certification">
+        	<div>
+        		<input type="hidden" name="certification" id="certification" value="1">
+        	</div>
+        </form>
+        <form id="email_form"> 
+        <div class="form-group email-form">
+			
+			<div style="display: inline-block">
+				<input type="text" class="form-control" name="mail" id="mail" placeholder="이메일" th:value="${cust.email}" readonly="readonly">
+			</div>   
+			<span class="input-group-addon">
+				<button type="button" class="btn btn-primary" id="sendMail">인증번호 요청</button>
+			</span>
+			<div class="mail-check-box" style="display: inline-block">
+				<input type="text" id="compare" class="form-control mail-check-input" placeholder="인증번호를 입력해주세요" maxlength="7">
+			</div>
+			<span id="time"></span>
+		</div>
+		</form>
+        </div>
+        <div class="modal-footer">
+			<a th:href="@{/custdetail(custid=${session.logincust.custid})}">
+			<a href=#>
+	          <button id="ok_btn" type="button" class="btn btn-default" style="background-color: #f15d30; color: white">확인</button>
+	        </a>
+        </div>
+      </div>
+    </div>
+</div>  
+  
+
+<section class="ftco-section contact-section ftco-no-pt">
+  <div class="container">
+    <div class="row block-9">
+      <div class="col-md-12 order-md-last d-flex">
+       <form class=" p-5 contact-form" style="border: solid lightgray 0.5px">
+          
+          <div id="mypage_info" class="form-group">
+            <h2>안녕하세요 : )</h2>
+            <h2 th:text = "${cust.custname}+' 님'" style="display: inline-block; margin-bottom: 0;  vertical-align: bottom"></h2>
+            
+            <button id="certifi_btn" type="button" class="btn" data-toggle="modal" data-target="#emailModal" style="margin-left:2%; margin-bottom: 4px; display: inline-block; background-color: lightgray;" th:if="${cust.certification == null}"> 본인인증하기</button>
+            <!-- <button type="button" class="btn" data-toggle="modal"  style="margin-left:3%; margin-bottom: 9px; width: 13%; display: inline-block; background-color: #00D8FF;" th:if="${cust.certification != null}">본인인증완료 </button> -->
+          	<div style="display: inline-block;vertical-align: bottom;margin-bottom:5px"><button  type="button" data-toggle="modal"  style="width: 8%;height:48px; display: inline-block; background-color: white; border: none" th:if="${cust.certification != null}" ><img th:src="@{/images/hotel/aaa2.jpg}" th:if="${cust.certification != null}" style="width: 48px ;"> </button></div>
+            <h4 th:text = "'보유포인트 : '+${cust.point}+'P'"></h4>
+            <h4 th:text = "'가입날짜 : '+${cust.rdate}"></h4>
+            
+          </div>
+        </form>
+        
+      </div>
+   </div>
+ </div>
+</section>
+
+

@@ -1,0 +1,93 @@
+<link rel="stylesheet" th:href="@{/css/reservation.css}">
+<script>
+var stompClient = null;
+
+function connect() {
+	var socket = new SockJS('http://101.101.219.167/admin/ws');
+	stompClient = Stomp.over(socket);//연결하기
+
+	stompClient.connect({}, function(frame) { 
+		console.log('Connected: ' + frame);
+		var check = JSON.stringify({
+		    'year' : $('#reservdate').text().substring(0,4),
+			'month' :$('#reservdate').text().substring(5,7),
+			'roomid' : $('#roomid').text()
+		});//요청할 달, 방 데이터 생성
+		
+		stompClient.send("/reservedcheck", {}, check);//컨트롤러에 데이터 요청
+		
+		stompClient.subscribe('/reservedresult', function(list) { 
+			for(var i=0; i<JSON.parse(list.body).length; i++){
+				var start = JSON.parse(list.body)[i].sdate;
+				var end = JSON.parse(list.body)[i].edate;			
+				if($('#roomid').text() == JSON.parse(list.body)[i].roomid){
+					for(var j = parseInt(start.substr(8,10))+1; j <= parseInt(end.substr(8,10))+1; j++){
+						if(parseInt(start.substr(5,7)) == $('#reservdate').text().substring(5,7))
+							tdGroup[j].classList.add('reserved');
+		    		}
+				}
+			}
+		});
+	});
+}
+$(document).ready(function(){
+	connect();
+});
+
+</script>
+ <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/ReservationBackground.jpeg');">
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+       <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="fa fa-chevron-right"></i></a></span> <span>Reservation</span><i class="fa fa-chevron-right"></i></a></span> <span>Reservation Detail</span></p>
+       <h1 class="mb-0 bread">Detail</h1>
+     </div>
+   </div>
+ </div>
+</section>
+
+<section class="ftco-section contact-section ftco-no-pt">
+<div class="container">
+    <div class="row block-9 justify-content-center">
+    	<ul class="reserv_padding">
+    		<ul id="reservdetail" class="reservmargin reserv_padding">
+    			<li>
+	    			<img class="reserv_imgwidth" style="width:auto;height:auto;max-height:40%;overfolw:hidden;object-fit:cover;" th:src="@{|images/hotel/${order.roomimg}|}">
+    			</li>
+    			<li class="justify-content-center reserv_width">
+    			<table id="reservdetail" class="table" style="margin-bottom:5%; border:2px solid lightgray;" >
+    				<tr>
+						<td>주문번호</td>
+						<td th:text="${order.orderid}"></td>
+					</tr>
+					<tr>
+						<td>예약자 성함</td>
+						<td th:text="${name}"></td>
+					</tr>
+					<tr>
+						<td>숙박 정보</td>
+						<td th:text="${roominfo}"></td>
+					</tr>
+					<tr>
+						<td>결제 가격</td>
+						<td th:text="${order.totalprice}"></td>
+					</tr>
+					<tr>
+						<td>숙박 인원</td>
+						<td th:text="${order.cnt}"></td>
+					</tr>
+					<tr>
+						<td>숙박 날짜</td>
+						<td id="reservdate" th:text="|${#dates.format(order.sdate, 'yyyy.MM.dd')} ~ ${#dates.format(order.edate, 'yyyy.MM.dd')}|"></td>
+					</tr><div id="roomid" th:text="${order.roomid}" style="display:none;"></div>
+				</table>
+    			</li>
+    		</ul>
+    		<li><a type:"button" th:href="@{/reservationlist(custid=${order.custid})}" class="btn btn-primary">목록</a></li>
+    	</ul>
+    	
+      </div>
+      
+ </div>
+
+</section>
