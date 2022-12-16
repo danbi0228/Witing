@@ -1,0 +1,50 @@
+<div class="content-wrapper">
+<!-- page header -->
+  <div class="page-header">
+    <h3 class="page-title">Q&A List</h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Forms</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Form elements</li>
+      </ol>
+    </nav>
+  </div>
+<!-- page header end -->
+
+  <div class="row">
+    <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-hover">
+			<colgroup>
+				<col style="width:12%">
+				<col style="width:50%">
+				<col style="width:15%">
+				<col style="width:13%">
+				<col style="width:10%">
+			</colgroup>
+		
+			<thead>
+			<tr id="tablehead" style="font-weight: bold">
+				<th>No</th>
+				<th style="text-align: center;">Title</th>
+				<th style="text-align: center;">Poster ID</th>
+				<th style="text-align: center;">Post Date</th>
+				<th style="text-align: center;">Answer</th>
+			</tr>
+			</thead>
+			<tbody th:each=li:${list}>
+			<tr th:onclick="|location.href='@{/qnadetail(postid=${li.postid})}'|" style="cursor: pointer">
+				<td th:text="${li.postid}" ></td>
+				<td th:text="${li.title}" style="text-align: center"></td>
+				<td th:text="${li.custid}" style="text-align: center"></td>
+				<td th:text="${#dates.format(li.rdate, 'yyyy-MM-dd')}" style="text-align: center"></td>
+				<td th:text="${li.answer}" style="text-align: center">답변완료</td>
+			</tr>
+			</tbody>
+		 </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
