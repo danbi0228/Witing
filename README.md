@@ -1,6 +1,6 @@
 # Witing
 Final Project by Team1 FJ
-<p align="center"><img src="witing/src/main/resources/static/images/readme/logo_readme.png" width="300" height="300"/></p>
+<p align="center"><img src="Witing/witing/src/main/resources/static/images/readme/logo_readme.png" width="300" height="300"/></p>
 
 
 ## 1. 프로젝트 주제
