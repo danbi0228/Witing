@@ -1,6 +1,6 @@
 # Witing
 Final Project by Team1 FJ
-> [Witing 시연 영상](https://github.com/heeyeon-developer/STUDY_WEB/blob/master/2020.08.31_DFS%26BFS.md)
+> [Witing 시연 영상](https://www.youtube.com/watch?v=NSLSuna8mqU)
 <p align="center"><img src="Witing/witing/src/main/resources/static/images/readme/logo_readme.png" width="300" height="300"/></p>
 
 
